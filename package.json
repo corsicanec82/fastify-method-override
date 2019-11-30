@@ -1,0 +1,35 @@
+{
+  "name": "fastify-method-override",
+  "version": "0.0.2",
+  "description": "plugin for fastify override http verbs",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline"
+  },
+  "keywords": [
+    "override",
+    "http",
+    "verbs",
+    "plugin",
+    "fastify"
+  ],
+  "files": [
+    "dist"
+  ],
+  "author": "Stanislav Dzisiak",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/corsicanec82/fastify-method-override.git"
+  },
+  "homepage": "https://github.com/corsicanec82/fastify-method-override.git#readme",
+  "bugs": {
+    "url": "https://github.com/corsicanec82/fastify-method-override.git/issues"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4"
+  }
+}
