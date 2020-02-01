@@ -1,8 +1,8 @@
 # fastify-method-override
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/21cf5772520dd80e1f7a/maintainability)](https://codeclimate.com/github/corsicanec82/fastify-method-override/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/21cf5772520dd80e1f7a/test_coverage)](https://codeclimate.com/github/corsicanec82/fastify-method-override/test_coverage)
-[![Build Status](https://travis-ci.org/corsicanec82/fastify-method-override.svg?branch=master)](https://travis-ci.org/corsicanec82/fastify-method-override)
+[![github action status](https://github.com/corsicanec82/fastify-method-override/workflows/workflow/badge.svg)](https://github.com/corsicanec82/fastify-method-override/actions)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c0c97dff8bda4e288123f08b3bd45fe7)](https://www.codacy.com/manual/corsicanec82/fastify-method-override?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=corsicanec82/fastify-method-override&amp;utm_campaign=Badge_Grade)
+[![test coverage](https://codecov.io/gh/corsicanec82/fastify-method-override/branch/master/graph/badge.svg)](https://codecov.io/gh/corsicanec82/fastify-method-override)
 [![npm version](https://badge.fury.io/js/fastify-method-override.svg)](https://badge.fury.io/js/fastify-method-override)
 
 Plugin for [Fastify](http://fastify.io/), which allows use HTTP verbs, such as DELETE, PATCH, HEAD, PUT, OPTIONS in case the client doesn't support them. Supports Fastify versions `>=2.0.0`.
