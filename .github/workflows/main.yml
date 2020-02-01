@@ -28,6 +28,7 @@ jobs:
         with:
           node-version: 12.x
       - run: make install
+      - run: make test-coverage
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TEST_REPORTER_ID }}
