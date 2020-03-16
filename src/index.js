@@ -14,7 +14,7 @@ const fastifyMethodOverride = (fastify, opts, next) => {
 
   const allowMethods = ['head', 'put', 'delete', 'options', 'patch'];
 
-  fastify.addHook('preHandler', async (req, reply, done) => {
+  fastify.addHook('preHandler', async (req, reply) => {
     const url = _.get(req, 'raw.url');
     const originalMethod = getMethod(req, 'raw.method');
     const method = getMethod(req, 'body._method');
@@ -30,8 +30,6 @@ const fastifyMethodOverride = (fastify, opts, next) => {
       _.set(req, 'raw.method', _.toUpper(method));
       await handler(req, reply);
     }
-
-    done();
   });
 
   next();
