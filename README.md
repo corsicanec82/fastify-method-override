@@ -24,7 +24,7 @@ const app = fastify();
 app.register(fastifyMethodOverride);
 ```
 
-To override the HTTP method, use the HTML form with the hidden _metod field and the value of the target method:
+To override the HTTP method, use the HTML form with the hidden _method field and the value of the target method:
 
 ```html
 <form method="POST" action="/url">
