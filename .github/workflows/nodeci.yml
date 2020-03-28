@@ -30,11 +30,11 @@ jobs:
         with:
           node-version: 12.x
       - name: Install dependencies
-      - run: make install
+        run: make install
       - name: Run linter
-      - run: make lint
+        run: make lint
       - name: Run test-coverage
-      - run: make test-coverage
+        run: make test-coverage
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TEST_REPORTER_ID }}
