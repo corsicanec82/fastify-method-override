@@ -1,26 +1,33 @@
 import fp from 'fastify-plugin';
 import _ from 'lodash';
 import { NotFound } from 'http-errors';
+import { match } from 'path-to-regexp';
 
 const getMethod = _.flow(_.get, _.toLower);
 
 const fastifyMethodOverride = (fastify, opts, next) => {
-  const routes = {};
+  const allowMethods = new Set(['head', 'put', 'delete', 'options', 'patch']);
+  const routeMatchers = {};
 
   fastify.addHook('onRoute', (routeOptions) => {
-    const { method, url, handler } = routeOptions;
-    _.set(routes, [url, _.toLower(method)], handler);
-  });
+    const { url, handler } = routeOptions;
+    const method = getMethod(routeOptions, 'method');
 
-  const allowMethods = ['head', 'put', 'delete', 'options', 'patch'];
+    if (allowMethods.has(method)) {
+      _.update(routeMatchers, _.toLower(method), (methodHandlers = []) => methodHandlers.concat({
+        check: match(url),
+        handler,
+      }));
+    }
+  });
 
   fastify.addHook('preHandler', async (req, reply) => {
     const url = _.get(req, 'raw.url');
     const originalMethod = getMethod(req, 'raw.method');
     const method = getMethod(req, 'body._method');
 
-    if (originalMethod === 'post' && allowMethods.includes(method)) {
-      const handler = _.get(routes, [url, method]);
+    if (originalMethod === 'post' && allowMethods.has(method)) {
+      const { handler } = _.get(routeMatchers, method).find(({ check }) => check(url)) || {};
 
       if (!handler) {
         const message = `Route ${_.toUpper(method)}:${url} not found`;

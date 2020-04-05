@@ -19,6 +19,14 @@ describe('fastifyMethodOverride', () => {
           reply.send({ method });
         },
       });
+
+      app.route({
+        method,
+        url: '/url/:id',
+        handler: (req, reply) => {
+          reply.send({ method });
+        },
+      });
     });
   });
 
@@ -81,6 +89,28 @@ describe('fastifyMethodOverride', () => {
 
       const actual = JSON.parse(res.body);
       const expected = { method: methodFrom };
+
+      expect(res.statusCode).toBe(200);
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('#should be override with params', () => {
+    test.each([
+      ['POST', 'HEAD'],
+      ['POST', 'PUT'],
+      ['POST', 'DELETE'],
+      ['POST', 'OPTIONS'],
+      ['POST', 'PATCH'],
+    ])('#test from %s to %s', async (methodFrom, methodTo) => {
+      const res = await app.inject({
+        method: methodFrom,
+        url: '/url/1',
+        payload: { _method: methodTo },
+      });
+
+      const actual = JSON.parse(res.body);
+      const expected = { method: methodTo };
 
       expect(res.statusCode).toBe(200);
       expect(actual).toEqual(expected);
