@@ -46,6 +46,7 @@
   "dependencies": {
     "fastify-plugin": "^1.6.1",
     "http-errors": "^1.7.3",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "path-to-regexp": "^6.1.0"
   }
 }
