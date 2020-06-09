@@ -27,13 +27,16 @@ const fastifyMethodOverride = (fastify, opts, next) => {
     const method = getMethod(req, 'body._method');
 
     if (originalMethod === 'post' && allowMethods.has(method)) {
-      const { handler } = _.get(routeMatchers, method).find(({ check }) => check(url)) || {};
+      const route = _.get(routeMatchers, method).find(({ check }) => check(url));
+      const { handler, check } = route || {};
 
       if (!handler) {
         const message = `Route ${_.toUpper(method)}:${url} not found`;
         throw new NotFound(message);
       }
 
+      const { params } = check(url);
+      _.set(req, 'params', { ...params });
       _.set(req, 'raw.method', _.toUpper(method));
       await handler(req, reply);
     }

@@ -24,7 +24,8 @@ describe('fastifyMethodOverride', () => {
         method,
         url: '/url/:id',
         handler: (req, reply) => {
-          reply.send({ method });
+          const { params } = req;
+          reply.send({ method, params });
         },
       });
     });
@@ -105,12 +106,12 @@ describe('fastifyMethodOverride', () => {
     ])('#test from %s to %s', async (methodFrom, methodTo) => {
       const res = await app.inject({
         method: methodFrom,
-        url: '/url/1',
+        url: '/url/id',
         payload: { _method: methodTo },
       });
 
       const actual = JSON.parse(res.body);
-      const expected = { method: methodTo };
+      const expected = { method: methodTo, params: { id: 'id' } };
 
       expect(res.statusCode).toBe(200);
       expect(actual).toEqual(expected);
