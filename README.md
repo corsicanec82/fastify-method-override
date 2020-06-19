@@ -32,3 +32,7 @@ To override the HTTP method, use the HTML form with the hidden _method field and
   <button type="submit">Submit</button>
 </form>
 ```
+
+### Note:
+
+If you use setNotFoundHandler, the plugin may not work correctly.
