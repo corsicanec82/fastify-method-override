@@ -42,6 +42,11 @@ const fastifyMethodOverride = (fastify, opts, next) => {
 
       await handler(req, reply);
     }
+
+    if (req.isNotFound) {
+      const message = `Route ${_.toUpper(originalMethod)}:${url} not found`;
+      throw new NotFound(message);
+    }
   };
 
   fastify.addHook('onRoute', (routeOptions) => {
@@ -62,7 +67,12 @@ const fastifyMethodOverride = (fastify, opts, next) => {
     }
   });
 
-  fastify.setNotFoundHandler(handleRedirect);
+  fastify.setNotFoundHandler({
+    preHandler: async (req, reply, done) => {
+      req.isNotFound = true;
+      await handleRedirect(req, reply, done);
+    },
+  });
 
   next();
 };

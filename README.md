@@ -33,6 +33,6 @@ To override the HTTP method, use the HTML form with the hidden _method field and
 </form>
 ```
 
-### Note:
+### Note
 
-If you use setNotFoundHandler, the plugin may not work correctly.
+If you use setNotFoundHandler, the plugin may not work correctly. In order to override the standard 404 error handler, you must use setErrorHandler.

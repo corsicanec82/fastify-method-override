@@ -118,6 +118,56 @@ describe('fastifyMethodOverride', () => {
     });
   });
 
+  describe('test setNotFoundHandler', () => {
+    it('GET 200', async () => {
+      const res = await app.inject({
+        method: 'GET',
+        url: '/',
+      });
+
+      expect(res.statusCode).toBe(200);
+    });
+
+    it('GET 200 override', async () => {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/',
+        payload: { _method: 'DELETE' },
+      });
+
+      expect(res.statusCode).toBe(200);
+    });
+
+    it('GET 200 not override', async () => {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/',
+        payload: { _method: 'ERRORMETHOD' },
+      });
+
+      expect(res.statusCode).toBe(200);
+    });
+
+    it('GET 404', async () => {
+      const res = await app.inject({
+        method: 'GET',
+        url: '/wrong-path',
+      });
+
+      expect(res.statusCode).toBe(404);
+    });
+
+    it('GET 404 override', async () => {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/wrong-path',
+        payload: { _method: 'DELETE' },
+      });
+
+      expect(res.statusCode).toBe(404);
+    });
+  });
+
   afterAll(() => {
     app.close();
   });
