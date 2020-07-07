@@ -18,7 +18,7 @@ const fastifyMethodOverride = (fastify, opts, next) => {
   const allowMethods = new Set(['head', 'put', 'delete', 'options', 'patch']);
   const routeMatchers = {};
 
-  const handleRedirect = async (req, reply, done) => {
+  const handleRedirect = async (req, reply) => {
     const url = _.get(req, 'raw.url');
     const originalMethod = getMethod(req, 'raw.method');
     const method = getMethod(req, 'body._method');
@@ -37,15 +37,27 @@ const fastifyMethodOverride = (fastify, opts, next) => {
       _.set(req, 'raw.method', _.toUpper(method));
 
       await async.each(preHandlers, async (preHandler) => {
-        await preHandler(req, reply, done);
+        await new Promise((resolve, reject) => {
+          const maybePromise = preHandler(req, reply, (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+          if (maybePromise.constructor.name === 'Promise') {
+            maybePromise
+              .then(() => {
+                resolve();
+              })
+              .catch((err) => {
+                reject(err);
+              });
+          }
+        });
       });
 
       await handler(req, reply);
-    }
-
-    if (req.isNotFound) {
-      const message = `Route ${_.toUpper(originalMethod)}:${url} not found`;
-      throw new NotFound(message);
     }
   };
 
@@ -69,7 +81,6 @@ const fastifyMethodOverride = (fastify, opts, next) => {
 
   fastify.setNotFoundHandler({
     preHandler: async (req, reply, done) => {
-      req.isNotFound = true;
       await handleRedirect(req, reply, done);
     },
   });
