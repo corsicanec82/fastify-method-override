@@ -45,7 +45,7 @@ const fastifyMethodOverride = (fastify, opts, next) => {
               resolve();
             }
           });
-          if (maybePromise.constructor.name === 'Promise') {
+          if (_.get(maybePromise, 'constructor.name') === 'Promise') {
             maybePromise
               .then(() => {
                 resolve();
