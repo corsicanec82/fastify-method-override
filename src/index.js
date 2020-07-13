@@ -8,13 +8,21 @@ import async from 'async';
 
 const getMethod = _.flow(_.get, _.toLower);
 
-const getPreHandlers = (routeOptions) => {
-  const preHandler = _.get(routeOptions, 'preHandler', []);
-  const preHandlers = _.isArray(preHandler) ? preHandler : [preHandler];
-  return preHandlers;
+const getHooks = (routeOptions, hookName) => {
+  const hook = _.get(routeOptions, hookName, []);
+  console.log(`hooks: ${hook}`);
+  return _.isArray(hook) ? hook : [hook];
 };
 
-const fastifyMethodOverride = (fastify, opts, next) => {
+const hooksTable = ['preValidation', 'preHandler'];
+
+const getAllHooks = (routeOptions) => hooksTable.reduce((acc, hookName) => {
+  console.log(`hookName: ${hookName}`);
+  const hooks = getHooks(routeOptions, hookName);
+  return [...acc, ...hooks];
+}, []);
+
+const fastifyMethodOverride = async (fastify, opts, next) => {
   const allowMethods = new Set(['head', 'put', 'delete', 'options', 'patch']);
   const routeMatchers = {};
 
@@ -25,7 +33,7 @@ const fastifyMethodOverride = (fastify, opts, next) => {
 
     if (originalMethod === 'post' && allowMethods.has(method)) {
       const route = _.get(routeMatchers, method).find(({ check }) => check(url));
-      const { handler, check, preHandlers } = route || {};
+      const { handler, check, hooks } = route || {};
 
       if (!handler) {
         const message = `Route ${_.toUpper(method)}:${url} not found`;
@@ -36,9 +44,9 @@ const fastifyMethodOverride = (fastify, opts, next) => {
       _.set(req, 'params', { ...params });
       _.set(req, 'raw.method', _.toUpper(method));
 
-      await async.each(preHandlers, async (preHandler) => {
+      for (const hook of hooks) {
         await new Promise((resolve, reject) => {
-          const maybePromise = preHandler(req, reply, (err) => {
+          const maybePromise = hook(req, reply, (err) => {
             if (err) {
               reject(err);
             } else {
@@ -55,7 +63,7 @@ const fastifyMethodOverride = (fastify, opts, next) => {
               });
           }
         });
-      });
+      }
 
       await handler(req, reply);
     }
@@ -64,17 +72,19 @@ const fastifyMethodOverride = (fastify, opts, next) => {
   fastify.addHook('onRoute', (routeOptions) => {
     const { url, handler } = routeOptions;
     const method = getMethod(routeOptions, 'method');
-    const preHandlers = getPreHandlers(routeOptions);
 
     if (allowMethods.has(method)) {
+      console.log(`--------------> method: ${routeOptions.method}, url: ${url}`);
+      const hooks = getAllHooks(routeOptions);
       _.update(routeMatchers, _.toLower(method), (methodHandlers = []) => methodHandlers.concat({
         check: match(url),
         handler,
-        preHandlers,
+        hooks,
       }));
     }
 
     if (_.toLower(routeOptions.method) === 'post') {
+      const preHandlers = getHooks(routeOptions, 'preHandler');
       _.set(routeOptions, 'preHandler', [handleRedirect, ...preHandlers]);
     }
   });
