@@ -4,20 +4,17 @@ import fp from 'fastify-plugin';
 import _ from 'lodash';
 import { NotFound } from 'http-errors';
 import { match } from 'path-to-regexp';
-import async from 'async';
 
 const getMethod = _.flow(_.get, _.toLower);
 
 const getHooks = (routeOptions, hookName) => {
   const hook = _.get(routeOptions, hookName, []);
-  console.log(`hooks: ${hook}`);
   return _.isArray(hook) ? hook : [hook];
 };
 
 const hooksTable = ['preValidation', 'preHandler'];
 
 const getAllHooks = (routeOptions) => hooksTable.reduce((acc, hookName) => {
-  console.log(`hookName: ${hookName}`);
   const hooks = getHooks(routeOptions, hookName);
   return [...acc, ...hooks];
 }, []);
@@ -45,6 +42,7 @@ const fastifyMethodOverride = async (fastify, opts, next) => {
       _.set(req, 'raw.method', _.toUpper(method));
 
       for (const hook of hooks) {
+        // eslint-disable-next-line
         await new Promise((resolve, reject) => {
           const maybePromise = hook(req, reply, (err) => {
             if (err) {
@@ -74,7 +72,6 @@ const fastifyMethodOverride = async (fastify, opts, next) => {
     const method = getMethod(routeOptions, 'method');
 
     if (allowMethods.has(method)) {
-      console.log(`--------------> method: ${routeOptions.method}, url: ${url}`);
       const hooks = getAllHooks(routeOptions);
       _.update(routeMatchers, _.toLower(method), (methodHandlers = []) => methodHandlers.concat({
         check: match(url),
