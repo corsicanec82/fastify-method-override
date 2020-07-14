@@ -1,6 +1,6 @@
 {
   "name": "fastify-method-override",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "description": "plugin for fastify override http verbs",
   "main": "lib/index.js",
   "scripts": {
