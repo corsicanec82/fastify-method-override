@@ -14,7 +14,8 @@ const getHooks = (routeOptions, hookName) => {
 
 const hooksTable = ['preValidation', 'preHandler'];
 
-const getAllHooks = (routeOptions) => hooksTable.flatMap(
+const getAllHooks = (routeOptions) => _.flatMap(
+  hooksTable,
   (hookName) => getHooks(routeOptions, hookName),
 );
 
