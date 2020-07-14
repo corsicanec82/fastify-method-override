@@ -14,10 +14,9 @@ const getHooks = (routeOptions, hookName) => {
 
 const hooksTable = ['preValidation', 'preHandler'];
 
-const getAllHooks = (routeOptions) => hooksTable.reduce((acc, hookName) => {
-  const hooks = getHooks(routeOptions, hookName);
-  return [...acc, ...hooks];
-}, []);
+const getAllHooks = (routeOptions) => hooksTable.flatMap(
+  (hookName) => getHooks(routeOptions, hookName),
+);
 
 const fastifyMethodOverride = async (fastify, opts, next) => {
   const allowMethods = new Set(['head', 'put', 'delete', 'options', 'patch']);
