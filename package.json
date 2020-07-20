@@ -1,6 +1,6 @@
 {
   "name": "fastify-method-override",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "plugin for fastify override http verbs",
   "main": "lib/index.js",
   "scripts": {
@@ -30,24 +30,24 @@
     "url": "https://github.com/corsicanec82/fastify-method-override.git/issues"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.10.4",
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.1.0",
-    "eslint": "^7.4.0",
+    "eslint": "^7.5.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jest": "^23.18.0",
-    "fastify": "^3.0.0",
+    "fastify": "^3.1.1",
     "jest": "^26.1.0",
     "jest-cli": "^26.1.0"
   },
   "dependencies": {
     "async": "^3.2.0",
-    "fastify-plugin": "^2.0.0",
+    "fastify-plugin": "^2.0.1",
     "http-errors": "^1.8.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "path-to-regexp": "^6.1.0"
   }
 }

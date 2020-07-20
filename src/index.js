@@ -61,6 +61,9 @@ const fastifyMethodOverride = async (fastify, opts, next) => {
               });
           }
         });
+        if (reply.sent) {
+          return;
+        }
       }
 
       await handler(req, reply);
@@ -87,8 +90,8 @@ const fastifyMethodOverride = async (fastify, opts, next) => {
   });
 
   fastify.setNotFoundHandler({
-    preHandler: async (req, reply, done) => {
-      await handleRedirect(req, reply, done);
+    preHandler: async (req, reply) => {
+      await handleRedirect(req, reply);
     },
   });
 
