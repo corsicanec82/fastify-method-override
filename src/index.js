@@ -25,7 +25,11 @@ const fastifyMethodOverride = (fastify, opts, next) => {
 
     if (originalMethod === 'post' && allowMethods.has(method)) {
       const route = _.get(routeMatchers, method).find(({ check }) => check(url));
-      const { handler, check, preHandlers } = route || {};
+      const {
+        handler, check, preHandlers, config,
+      } = route || {};
+
+      _.set(reply, 'context.config', config);
 
       if (!handler) {
         const message = `Route ${_.toUpper(method)}:${url} not found`;
@@ -62,7 +66,7 @@ const fastifyMethodOverride = (fastify, opts, next) => {
   };
 
   fastify.addHook('onRoute', (routeOptions) => {
-    const { url, handler } = routeOptions;
+    const { url, handler, config } = routeOptions;
     const method = getMethod(routeOptions, 'method');
     const preHandlers = getPreHandlers(routeOptions);
 
@@ -71,6 +75,7 @@ const fastifyMethodOverride = (fastify, opts, next) => {
         check: match(url),
         handler,
         preHandlers,
+        config,
       }));
     }
 
