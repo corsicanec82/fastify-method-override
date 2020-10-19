@@ -80,6 +80,18 @@ describe('fastifyMethodOverride', () => {
         reply.send({ method: 'PATCH' });
       },
     });
+
+    app.route({
+      method: 'PUT',
+      url: '/withconfig',
+      config: {
+        a: 'a',
+        b: 'b',
+      },
+      handler: (req, reply) => {
+        reply.send({ method: 'PUT', config: reply.context.config });
+      },
+    });
   });
 
   describe('#should be override', () => {
@@ -252,6 +264,21 @@ describe('fastifyMethodOverride', () => {
       });
 
       expect(res.statusCode).toBe(404);
+    });
+
+    it('PUT should have route config', async () => {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/withconfig',
+        payload: { _method: 'PUT' },
+      });
+      const actual = JSON.parse(res.body);
+      expect(actual).toMatchObject({
+        method: 'PUT',
+        config: {
+          a: 'a', b: 'b', method: 'PUT', url: '/withconfig',
+        },
+      });
     });
   });
 
