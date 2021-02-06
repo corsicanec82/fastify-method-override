@@ -29,10 +29,12 @@ To override the HTTP method, use the HTML form with the hidden _method field and
 ```html
 <form method="POST" action="/url">
   <input type="hidden" name="_method" value="DELETE">
-  <button type="submit">Submit</button>
+  <input type="submit" value="Submit">
 </form>
 ```
 
 ### Note
 
 If you use setNotFoundHandler, the plugin may not work correctly. In order to override the standard 404 error handler, you must use setErrorHandler.
+
+If you are having trouble using the plugin, you can use the [`fastify-method-override-wrapper`](https://github.com/corsicanec82/fastify-method-override-wrapper) library.
