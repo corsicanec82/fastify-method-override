@@ -276,7 +276,7 @@ describe('fastifyMethodOverride', () => {
       expect(actual).toMatchObject({
         method: 'PUT',
         config: {
-          a: 'a', b: 'b', method: 'PUT', url: '/withconfig',
+          a: 'a', b: 'b',
         },
       });
     });
