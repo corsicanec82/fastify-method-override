@@ -38,6 +38,15 @@ describe('fastifyMethodOverride', () => {
           reply.send({ method, params });
         },
       });
+
+      app.route({
+        method,
+        url: '/site/:name/assets/*',
+        handler: (req, reply) => {
+          const { params } = req;
+          reply.send({ method, params });
+        },
+      });
     });
 
     app.route({
@@ -159,25 +168,57 @@ describe('fastifyMethodOverride', () => {
     });
   });
 
-  describe('#should be override with params', () => {
-    test.each([
+  describe('should work', () => {
+    const cases = [
       ['POST', 'HEAD'],
       ['POST', 'PUT'],
       ['POST', 'DELETE'],
       ['POST', 'OPTIONS'],
       ['POST', 'PATCH'],
-    ])('#test from %s to %s', async (methodFrom, methodTo) => {
-      const res = await app.inject({
-        method: methodFrom,
-        url: '/url/id',
-        payload: { _method: methodTo },
+      ['GET', 'GET'],
+      ['PUT', 'PUT'],
+      ['HEAD', 'HEAD'],
+      ['PATCH', 'PATCH'],
+      ['OPTIONS', 'OPTIONS'],
+      ['DELETE', 'DELETE'],
+    ];
+
+    describe('with named params', () => {
+      test.each(cases)('#test from %s to %s', async (methodFrom, methodTo) => {
+        const res = await app.inject({
+          method: methodFrom,
+          url: '/url/id',
+          payload: { _method: methodTo },
+        });
+
+        const actual = JSON.parse(res.body);
+        const expected = { method: methodTo, params: { id: 'id' } };
+
+        expect(res.statusCode).toBe(200);
+        expect(actual).toEqual(expected);
       });
+    });
 
-      const actual = JSON.parse(res.body);
-      const expected = { method: methodTo, params: { id: 'id' } };
+    describe('with named & unnamed params', () => {
+      test.each(cases)('#test from %s to %s', async (methodFrom, methodTo) => {
+        const res = await app.inject({
+          method: methodFrom,
+          url: '/site/testname/assets/some/asset/file',
+          payload: { _method: methodTo },
+        });
 
-      expect(res.statusCode).toBe(200);
-      expect(actual).toEqual(expected);
+        const actual = JSON.parse(res.body);
+        const expected = {
+          method: methodTo,
+          params: {
+            '*': 'some/asset/file',
+            name: 'testname',
+          },
+        };
+
+        expect(res.statusCode).toBe(200);
+        expect(actual).toEqual(expected);
+      });
     });
   });
 

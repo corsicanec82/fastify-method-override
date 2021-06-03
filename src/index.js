@@ -4,6 +4,7 @@ import fp from 'fastify-plugin';
 import _ from 'lodash';
 import { NotFound } from 'http-errors';
 import { match } from 'path-to-regexp';
+import path from 'path';
 
 const getMethod = _.flow(_.get, _.toLower);
 
@@ -42,7 +43,10 @@ const fastifyMethodOverride = async (fastify, opts, next) => {
       }
 
       const { params } = check(url);
-      _.set(req, 'params', { ...params });
+      const baseParams = _.has(params, 'unnamedParams')
+        ? { '*': params.unnamedParams.join(path.sep) }
+        : {};
+      _.set(req, 'params', { ...baseParams, ..._.omit(params, 'unnamedParams') });
       _.set(req, 'raw.method', _.toUpper(method));
 
       for (const hook of hooks) {
@@ -81,7 +85,7 @@ const fastifyMethodOverride = async (fastify, opts, next) => {
     if (allowMethods.has(method)) {
       const hooks = getAllHooks(routeOptions);
       _.update(routeMatchers, _.toLower(method), (methodHandlers = []) => methodHandlers.concat({
-        check: match(url),
+        check: match(url.replace(/\*.*/, ':unnamedParams*')),
         handler,
         hooks,
         config,
