@@ -30,12 +30,12 @@ const fastifyMethodOverride = async (fastify, opts, next) => {
     const method = getMethod(req, 'body._method');
 
     if (originalMethod === 'post' && allowMethods.has(method)) {
-      const route = _.get(routeMatchers, method).find(({ check }) => check(url));
-      const {
-        handler, check, hooks, config,
-      } = route || {};
+      const route = _.get(routeMatchers, method).find(({ check }) => check(url)) || {};
+      const { handler, check, hooks } = route;
+      const config = _.get(route, 'config', {});
+      const replyConfig = _.get(reply, 'context.config', {});
 
-      _.set(reply, 'context.config', config);
+      _.set(reply, 'context.config', { ...config, ...replyConfig, method: _.toUpper(method) });
 
       if (!handler) {
         const message = `Route ${_.toUpper(method)}:${url} not found`;
