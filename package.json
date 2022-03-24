@@ -30,22 +30,22 @@
     "url": "https://github.com/corsicanec82/fastify-method-override.git/issues"
   },
   "devDependencies": {
-    "@babel/cli": "^7.14.3",
-    "@babel/core": "^7.14.3",
-    "@babel/preset-env": "^7.14.4",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^27.0.2",
-    "eslint": "^7.27.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jest": "^24.3.6",
-    "fastify": "^3.17.0",
-    "jest": "^27.0.4",
-    "jest-cli": "^27.0.4"
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "babel-jest": "^27.5.1",
+    "eslint": "^8.11.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jest": "^26.1.3",
+    "fastify": "^3.27.4",
+    "jest": "^27.5.1",
+    "jest-cli": "^27.5.1"
   },
   "dependencies": {
-    "fastify-plugin": "^3.0.0",
-    "http-errors": "^1.8.0",
+    "fastify-plugin": "^3.0.1",
+    "http-errors": "^2.0.0",
     "lodash": "^4.17.21",
     "path-to-regexp": "^6.2.0"
   }

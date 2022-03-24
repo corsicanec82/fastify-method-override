@@ -3,10 +3,10 @@
 root: true
 
 extends:
-  - 'airbnb-base'
-  - 'plugin:jest/recommended'
+  - "airbnb-base"
+  - "plugin:jest/recommended"
 
-parser: babel-eslint
+parser: "@babel/eslint-parser"
 
 env:
   node: true
