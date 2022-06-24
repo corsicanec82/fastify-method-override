@@ -10,9 +10,9 @@ describe('fastifyMethodOverride', () => {
   const methods = ['GET', 'POST', 'HEAD', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'];
   let app;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     app = fastify();
-    app.register(fastifyMethodOverride);
+    await app.register(fastifyMethodOverride);
 
     methods.forEach((method) => {
       app.route({
