@@ -3,9 +3,6 @@
   "version": "1.5.10",
   "description": "plugin for fastify override http verbs",
   "main": "lib/index.js",
-  "publishConfig": {
-    "corsicanec82:registry": "https://registry.npmjs.org"
-  },
   "scripts": {
     "test": "jest",
     "clean": "rm -rf lib",
