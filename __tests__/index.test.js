@@ -11,7 +11,7 @@ describe('fastifyMethodOverride', () => {
   let app;
 
   beforeAll(async () => {
-    app = fastify();
+    app = fastify({ exposeHeadRoutes: false });
     await app.register(fastifyMethodOverride);
 
     methods.forEach((method) => {
