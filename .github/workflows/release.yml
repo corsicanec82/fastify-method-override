@@ -14,13 +14,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          registry-url: https://registry.npmjs.org
       - name: Install dependencies
-        run: make install
+        run: npm ci
       - name: Run linter
-        run: make lint
+        run: npx eslint .
       - name: Run tests
-        run: make test
+        run: npm test
       - name: Publish
-        run: |
-          npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
-          make publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
