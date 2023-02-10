@@ -8,13 +8,13 @@ jobs:
   test:
     strategy:
       matrix:
-        node-version: ['16', '17']
+        node-version: [16, 18, 19]
 
     name: Use node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - run: make install
@@ -25,16 +25,16 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 18
       - name: Install dependencies
         run: make install
       - name: Run linter
         run: make lint
       - name: Run test-coverage
         run: make test-coverage
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TEST_REPORTER_ID }}
